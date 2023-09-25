@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tests-vk-bot"
+version = "0.1.0"
+description = "bot gives users opportunity to be tested against topic questions and gives info links for better results"
+authors = ["mmmhdp <malcevnik99@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "tests_vk_bot"}]
+
+[tool.poetry.dependencies]
+python = "3.11.5"
+python-dotenv = "^1.0.0"
+vk-api = "^11.9.9"
+beautifulsoup4 = "^4.12.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
