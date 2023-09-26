@@ -1,9 +1,8 @@
 import os
-from dotenv import load_dotenv
 import vk_api
 from vk_api.longpoll import VkLongPoll
 from core.EventHandler.EventHandler import EventHandler
-
+from decouple import config
 
 class MessageBroker:
     def __init__(self):
@@ -14,8 +13,7 @@ class MessageBroker:
         self.__event_handler = None
 
     def setup(self):
-        load_dotenv()
-        self.__key = os.getenv("VK_BOT_KEY")
+        self.__key = config("VK_BOT_KEY")
         self.__vk_session = vk_api.VkApi(token=self.__key)
         self.__longpoll = VkLongPoll(self.__vk_session)
         self.__vk = self.__vk_session.get_api()

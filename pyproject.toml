@@ -9,9 +9,9 @@ packages = [{include = "tests_vk_bot"}]
 
 [tool.poetry.dependencies]
 python = "3.11.5"
-python-dotenv = "^1.0.0"
 vk-api = "^11.9.9"
 beautifulsoup4 = "^4.12.2"
+python-decouple = "^3.8"
 
 
 [build-system]
