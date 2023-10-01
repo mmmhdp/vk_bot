@@ -3,6 +3,11 @@ from core.DataBase.DataBase import DataBase
 
 
 class Keyboard:
+
+    @classmethod
+    def get_empty_keyboard(cls):
+        return VkKeyboard()
+
     @classmethod
     def get_init_keyboard(cls):
         keyboard = VkKeyboard()
