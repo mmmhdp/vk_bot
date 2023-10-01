@@ -1,6 +1,6 @@
 import sqlite3
 from collections import namedtuple
-from typing import List, Any
+import math
 
 
 class DataBase:
@@ -33,7 +33,7 @@ class DataBase:
         con.commit()
 
     @classmethod
-    def get_unanswered_question(cls, topic):
+    def get_unanswered_question(cls, topic, user_id):
         con = cls.connect()
         cur = con.cursor()
         cur.execute("select ROWID from question left outer join "
@@ -41,9 +41,12 @@ class DataBase:
                     "select question_id from question "
                     "inner join user_question "
                     "ON question.ROWID = user_question.question_id"
+                    "user_question.user_id ="
+                    f"'{user_id}'"
                     ") as inside "
-                    "ON question.ROWID = inside.question_id where question_id IS NULL and topic="
-                    + f"'{topic}'")
+                    "ON question.ROWID = inside.question_id "
+                    "where question_id IS NULL and topic="
+                    f"'{topic}'")
         not_answered_questions: list[str] = cur.fetchall()
         if not_answered_questions:
             q_id = int(*not_answered_questions[0])
@@ -67,3 +70,39 @@ class DataBase:
         cur.execute("INSERT INTO user_question(user_id, question_id)"
                     f"VALUES ('{user_id}','{question.id}')")
         con.commit()
+
+    @classmethod
+    def get_user_statistics(cls, user_id):
+        user_statistics = []
+        Stats = namedtuple("Stats", ["topic", "ans_percentage"])
+
+        con = cls.connect()
+        cur = con.cursor()
+        cur.execute("SELECT DISTINCT topic FROM question")
+        raw_topics = cur.fetchall()
+        for raw_topic in raw_topics:
+            topic = raw_topic[0]
+
+            cur.execute("SELECT COUNT(topic) "
+                        "FROM question JOIN user_question uq "
+                        "ON question.ROWID = uq.question_id "
+                        "WHERE question_id IS NOT NULL AND topic="
+                        f"'{topic}' "
+                        "AND user_id="
+                        f"{user_id}")
+            raw_num_of_answered_questions_by_topic = cur.fetchall()
+            noaqbt = raw_num_of_answered_questions_by_topic[0][0]
+
+            cur.execute("SELECT COUNT(topic) "
+                        "FROM question "
+                        "WHERE topic="
+                        f"'{topic}'")
+            raw_total_questions_by_topic = cur.fetchall()
+            rqbt = raw_total_questions_by_topic[0][0]
+
+            ans_perc = (noaqbt / rqbt) * 100
+            ans_perc = math.trunc(ans_perc)
+            topic_stat = Stats(topic, ans_perc)
+            user_statistics.append(topic_stat)
+
+        return user_statistics

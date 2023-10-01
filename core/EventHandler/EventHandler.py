@@ -26,7 +26,8 @@ class EventHandler:
 
                 elif request in DataBase.get_topics():
                     self.testing(request)
-
+                elif request == "Моя статистика":
+                    self.show_stats()
                 else:
                     if self.is_message_before_last_is_valid_question_message():
                         self.check_answer(request)
@@ -35,10 +36,14 @@ class EventHandler:
                         self.incorrect_topic()
 
     def is_message_before_last_is_valid_question_message(self):
+        if not self.__last_asked_question:
+            return False
+
         bot_last_message = self.__vk.messages.getHistory(count=2,
-                                                         user_id=self.__curr_user_id)["items"][1]["text"]
+            user_id=self.__curr_user_id)["items"][1]["text"]
         potential_raw_last_question = self.__last_asked_question.question
         potential_real_last_question = "Вопрос: " + potential_raw_last_question + "?"
+
         return True if bot_last_message == potential_real_last_question else False
 
     def init(self):
@@ -62,7 +67,7 @@ class EventHandler:
         )
 
     def testing(self, topic):
-        question = DataBase.get_unanswered_question(topic)
+        question = DataBase.get_unanswered_question(topic, self.__curr_user_id)
         if not question.question:
             keyboard = Keyboard.get_all_topics_keyboard()
 
@@ -77,7 +82,7 @@ class EventHandler:
         else:
             self.__last_asked_question = question
 
-            keyboard = Keyboard.get_empty_keyboard()
+            keyboard = Keyboard.get_basic_keyboard()
 
             self.__vk.messages.send(
                 keyboard=keyboard.get_empty_keyboard(),
@@ -105,7 +110,7 @@ class EventHandler:
                 message="На, вот, подучи матчасть, там уж и поговорим, да.\n"
                         f"{self.__last_asked_question.link}"
             )
-        self.__last_asked_question = None
+        self.__last_asked_question = ""
 
     def incorrect_topic(self):
         keyboard = Keyboard.get_init_keyboard()
@@ -116,3 +121,22 @@ class EventHandler:
             message="Кажется, что с этим я не могу вам помочь в данный момент.\n"
                     "Но возможно, вам будут интересны другие возможности бота."
         )
+
+    def show_stats(self):
+        user_name = self.__vk.users.get(user_ids=(self.__curr_user_id))[0]["first_name"]
+        keyboard = Keyboard.get_init_keyboard()
+        stats = DataBase.get_user_statistics(self.__curr_user_id)
+        self.__vk.messages.send(
+            keyboard=keyboard.get_keyboard(),
+            user_id=self.__curr_user_id,
+            random_id=get_random_id(),
+            message=f"Вот твои текущие результаты, {user_name}: "
+        )
+        for st_for_topic in stats:
+            self.__vk.messages.send(
+                keyboard=keyboard.get_keyboard(),
+                user_id=self.__curr_user_id,
+                random_id=get_random_id(),
+                message=f"По теме {st_for_topic.topic} процент успешных ответов \n равен "
+                        f"{st_for_topic.ans_percentage} %!"
+            )
