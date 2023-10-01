@@ -40,8 +40,8 @@ class DataBase:
                     "("
                     "select question_id from question "
                     "inner join user_question "
-                    "ON question.ROWID = user_question.question_id"
-                    "user_question.user_id ="
+                    "ON question.ROWID = user_question.question_id " 
+                    "WHERE user_question.user_id ="
                     f"'{user_id}'"
                     ") as inside "
                     "ON question.ROWID = inside.question_id "
@@ -106,3 +106,44 @@ class DataBase:
             user_statistics.append(topic_stat)
 
         return user_statistics
+
+    @classmethod
+    def have_new_update(cls, user_id):
+        con = cls.connect()
+        cur = con.cursor()
+        cur.execute("SELECT COUNT(rowid) FROM question;")
+        raw_num = cur.fetchone()
+        curr_num = raw_num[0]
+        cur.execute("SELECT last_seen_amount FROM user WHERE vk_user_id="
+                    f"'{user_id}'")
+        raw_user_num = cur.fetchone()
+        user_num = int(raw_user_num[0])
+        if curr_num != user_num:
+            cur.execute("UPDATE user "
+                        "SET last_seen_amount ="
+                        f"'{curr_num}'"
+                        "where vk_user_id="
+                        f"'{user_id}'")
+            con.commit()
+            return True
+        else:
+            return False
+
+    #POTENTIAL TEST METHOD
+    # @classmethod
+    # def add_new_material(cls):
+    #     con = cls.connect()
+    #     cur = con.cursor()
+    #     new_topic = "Математика"
+    #     new_questions = ["2+2", "3+3", "5+2"]
+    #     new_answers = ["4", "6", "7"]
+    #     new_links = ["https://Математика/1", "https://Математика/2", "https://Математика/3"]
+    #     for ind in range(len(new_questions)):
+    #         cur.execute("INSERT INTO question (topic, question, answer, link) "
+    #                     f"VALUES ("
+    #                     f"'{new_topic}',"
+    #                     f"'{new_questions[ind]}',"
+    #                     f"'{new_answers[ind]}',"
+    #                     f"'{new_links[ind]}')")
+    #         con.commit()
+    #     cur.execute("DELETE FROM question WHERE topic='Математика'")

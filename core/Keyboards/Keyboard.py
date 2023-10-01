@@ -25,7 +25,6 @@ class Keyboard:
             if ind % 2 == 1:
                 keyboard.add_line()
 
-        keyboard.add_line()
         keyboard.add_button("Моя статистика")
 
         return keyboard

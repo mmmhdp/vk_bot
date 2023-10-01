@@ -17,8 +17,12 @@ class EventHandler:
                 self.__curr_user_id = event.user_id
 
                 DataBase.add_user(self.__curr_user_id)
+                new_update_flag = DataBase.have_new_update(self.__curr_user_id)
 
-                if request == "Начать":
+                if new_update_flag:
+                    self.update_alert()
+
+                elif request == "Начать":
                     self.init()
 
                 elif request == "Пройти тест по теме":
@@ -26,8 +30,10 @@ class EventHandler:
 
                 elif request in DataBase.get_topics():
                     self.testing(request)
+
                 elif request == "Моя статистика":
                     self.show_stats()
+
                 else:
                     if self.is_message_before_last_is_valid_question_message():
                         self.check_answer(request)
@@ -107,7 +113,7 @@ class EventHandler:
                 keyboard=keyboard.get_keyboard(),
                 user_id=self.__curr_user_id,
                 random_id=get_random_id(),
-                message="На, вот, подучи матчасть, там уж и поговорим, да.\n"
+                message="Ответ неверен. Попробуй узнать больше по ссылке и возвращайся к вопросу позже.\n"
                         f"{self.__last_asked_question.link}"
             )
         self.__last_asked_question = ""
@@ -137,6 +143,18 @@ class EventHandler:
                 keyboard=keyboard.get_keyboard(),
                 user_id=self.__curr_user_id,
                 random_id=get_random_id(),
-                message=f"По теме {st_for_topic.topic} процент успешных ответов \n равен "
-                        f"{st_for_topic.ans_percentage} %!"
+                message=f"По теме {st_for_topic.topic} процент успешных ответов \n "
+                        f"равен {st_for_topic.ans_percentage} %!"
             )
+
+    def update_alert(self):
+        keyboard = Keyboard.get_init_keyboard()
+        user_name = self.__vk.users.get(user_ids=(self.__curr_user_id))[0]["first_name"]
+        self.__vk.messages.send(
+            keyboard=keyboard.get_keyboard(),
+            user_id=self.__curr_user_id,
+            random_id=get_random_id(),
+            message=f"Приветствую {user_name}!\n"
+                    "Рады вам сообщить, что банк вопросов нашего бота пополнен.\n"
+                    "Желаем удачи в новых челленджах!",
+        )
