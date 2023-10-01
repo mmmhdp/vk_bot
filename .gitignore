@@ -1,1 +1,2 @@
 /.env
+/core/DataBase/sqlite_db/questions.db
