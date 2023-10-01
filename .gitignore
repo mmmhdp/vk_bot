@@ -1,2 +1,2 @@
 /.env
-/core/DataBase/sqlite_db/questions.db
+/core/DataBase/sqlite_db/testing_app.db

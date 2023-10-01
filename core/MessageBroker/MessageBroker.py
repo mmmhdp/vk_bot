@@ -2,7 +2,6 @@ import vk_api
 from vk_api.longpoll import VkLongPoll
 from core.EventHandler.EventHandler import EventHandler
 from decouple import config
-from core.DataBase.DataBase import DataBase
 
 
 class MessageBroker:

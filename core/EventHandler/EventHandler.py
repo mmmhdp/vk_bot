@@ -1,7 +1,7 @@
 from vk_api.longpoll import VkEventType
 from vk_api.utils import get_random_id
 from core.Keyboards.Keyboard import Keyboard
-from core.TestHandler.Test import Test
+from core.DataBase.DataBase import DataBase
 import re
 
 
@@ -16,13 +16,15 @@ class EventHandler:
                 request = event.text
                 self.__curr_user_id = event.user_id
 
+                DataBase.add_user(self.__curr_user_id)
+
                 if request == "Начать":
                     self.init()
 
                 elif request == "Пройти тест по теме":
                     self.show_all_topics()
 
-                elif request in Test.get_all_topics():
+                elif request in DataBase.get_topics():
                     self.testing(request)
 
                 elif re.search("^Ответ:", request):
@@ -48,11 +50,12 @@ class EventHandler:
             keyboard=keyboard.get_keyboard(),
             user_id=self.__curr_user_id,
             random_id=get_random_id(),
-            message="По данный момент доступны тесты только по данным темам.",
+            message="На данный момент доступны тесты только по данным темам.",
         )
 
     def testing(self, topic):
-        pass
+        question = DataBase.get_unanswered_question(topic)
+        print(f"тестиремся ёба по {question}")
 
     def check_answer(self):
         keyboard = Keyboard.get_all_topics_keyboard()
