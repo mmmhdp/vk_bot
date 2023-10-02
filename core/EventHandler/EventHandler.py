@@ -1,3 +1,5 @@
+import logging
+
 from vk_api.longpoll import VkEventType
 from vk_api.utils import get_random_id
 from core.Keyboards.Keyboard import Keyboard
@@ -9,30 +11,38 @@ class EventHandler:
         self.__vk = vk_api_driver
         self.__curr_user_id = None
         self.__last_asked_question = None
+        self.__logger = logging.getLogger(__name__)
 
     def handle(self, event):
+
         if event.type == VkEventType.MESSAGE_NEW:
             if event.to_me:
                 request = event.text
                 self.__curr_user_id = event.user_id
 
                 DataBase.add_user(self.__curr_user_id)
+
                 new_update_flag = DataBase.have_new_update(self.__curr_user_id)
 
                 if new_update_flag:
                     self.update_alert()
+                    self.__logger.debug(f"user with user_id {self.__curr_user_id} notified about updates")
 
                 elif request == "Начать":
                     self.init()
+                    self.__logger.debug(f"user with user_id {self.__curr_user_id} started session")
 
                 elif request == "Пройти тест по теме":
                     self.show_all_topics()
+                    self.__logger.debug(f"user with user_id {self.__curr_user_id} chose test section")
 
                 elif request in DataBase.get_topics():
+                    self.__logger.debug(f"user with user_id {self.__curr_user_id} pick the topic {request}")
                     self.testing(request)
 
                 elif request == "Моя статистика":
                     self.show_stats()
+                    self.__logger.debug(f"user with user_id {self.__curr_user_id} asked for stats")
 
                 else:
                     if self.is_message_before_last_is_valid_question_message():
@@ -40,13 +50,14 @@ class EventHandler:
 
                     else:
                         self.incorrect_topic()
+                        self.__logger.debug(f"user with user_id {self.__curr_user_id} gives wrong input")
 
     def is_message_before_last_is_valid_question_message(self):
         if not self.__last_asked_question:
             return False
 
         bot_last_message = self.__vk.messages.getHistory(count=2,
-            user_id=self.__curr_user_id)["items"][1]["text"]
+                                                         user_id=self.__curr_user_id)["items"][1]["text"]
         potential_raw_last_question = self.__last_asked_question.question
         potential_real_last_question = "Вопрос: " + potential_raw_last_question + "?"
 
@@ -76,6 +87,7 @@ class EventHandler:
         question = DataBase.get_unanswered_question(topic, self.__curr_user_id)
         if not question.question:
             keyboard = Keyboard.get_all_topics_keyboard()
+            self.__logger.debug(f"user with user_id {self.__curr_user_id} end questions on topic {topic}")
 
             self.__vk.messages.send(
                 keyboard=keyboard.get_keyboard(),
@@ -87,6 +99,7 @@ class EventHandler:
             )
         else:
             self.__last_asked_question = question
+            self.__logger.debug(f"user with user_id {self.__curr_user_id} get question with id {question.id}")
 
             keyboard = Keyboard.get_basic_keyboard()
 
@@ -100,6 +113,8 @@ class EventHandler:
     def check_answer(self, answer):
         keyboard = Keyboard.get_all_topics_keyboard()
         if answer.lower() == self.__last_asked_question.answer.lower():
+            self.__logger.debug(f"user with user_id {self.__curr_user_id}"
+                                f" gives right answer on question with id {self.__last_asked_question.id}")
             self.__vk.messages.send(
                 keyboard=keyboard.get_keyboard(),
                 user_id=self.__curr_user_id,
@@ -109,6 +124,9 @@ class EventHandler:
             DataBase.add_correct_answer_to_user_score(self.__curr_user_id, self.__last_asked_question)
 
         else:
+            self.__logger.debug(f"user with user_id {self.__curr_user_id} "
+                                f"gives wrong answer on question with id {self.__last_asked_question.id}")
+
             self.__vk.messages.send(
                 keyboard=keyboard.get_keyboard(),
                 user_id=self.__curr_user_id,

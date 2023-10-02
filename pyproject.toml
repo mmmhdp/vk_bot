@@ -8,10 +8,11 @@ readme = "README.md"
 packages = [{include = "tests_vk_bot"}]
 
 [tool.poetry.dependencies]
-python = "3.10.5"
+python = "3.11.5"
 vk-api = "^11.9.9"
 beautifulsoup4 = "^4.12.2"
 python-decouple = "^3.8"
+pylint = "^2.17.7"
 
 
 [build-system]

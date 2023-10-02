@@ -1,12 +1,15 @@
+import logging
 import sqlite3
 from collections import namedtuple
 import math
 
 
 class DataBase:
+    logger = logging.getLogger(__name__)
 
-    @staticmethod
-    def connect():
+    @classmethod
+    def connect(cls):
+        cls.logger.info("connected to db")
         connection = sqlite3.connect("core/DataBase/sqlite_db/testing_app.db")
         # connection = sqlite3.connect("sqlite_db/testing_app.db")
         return connection
@@ -20,6 +23,7 @@ class DataBase:
         all_topics = set()
         for topic in raw_topics:
             all_topics.add(*topic)
+        cls.logger.info("get all topics from db")
         return all_topics
 
     @classmethod
@@ -31,6 +35,7 @@ class DataBase:
                     f"ON CONFLICT(vk_user_id)"
                     f"DO NOTHING")
         con.commit()
+        cls.logger.info("new user added to db")
 
     @classmethod
     def get_unanswered_question(cls, topic, user_id):
@@ -40,7 +45,7 @@ class DataBase:
                     "("
                     "select question_id from question "
                     "inner join user_question "
-                    "ON question.ROWID = user_question.question_id " 
+                    "ON question.ROWID = user_question.question_id "
                     "WHERE user_question.user_id ="
                     f"'{user_id}'"
                     ") as inside "
@@ -57,10 +62,12 @@ class DataBase:
             raw_question = cur.fetchall()
             Question = namedtuple("Question", ["id", "topic", "question", "answer", "link"])
             question = Question(*raw_question[0])
+            cls.logger.info(f"get unanswered question with id {question.id} from db for user {user_id}")
             return question
         else:
             Question = namedtuple("Question", ["id", "topic", "question", "answer", "link"])
             none_res = [None for _ in range(5)]
+            cls.logger.info(f"can't retrieve unanswered question for user {user_id} on topic {topic} from db")
             return Question(*none_res)
 
     @classmethod
@@ -70,6 +77,8 @@ class DataBase:
         cur.execute("INSERT INTO user_question(user_id, question_id)"
                     f"VALUES ('{user_id}','{question.id}')")
         con.commit()
+
+        cls.logger.info(f"added correct for question with {question.id} for user {user_id} from db")
 
     @classmethod
     def get_user_statistics(cls, user_id):
@@ -105,6 +114,7 @@ class DataBase:
             topic_stat = Stats(topic, ans_perc)
             user_statistics.append(topic_stat)
 
+        cls.logger.info(f"retrieve stats for user {user_id} from db")
         return user_statistics
 
     @classmethod
@@ -118,6 +128,9 @@ class DataBase:
                     f"'{user_id}'")
         raw_user_num = cur.fetchone()
         user_num = int(raw_user_num[0])
+
+        cls.logger.info(f"checked for updates for user {user_id} from db")
+
         if curr_num != user_num:
             cur.execute("UPDATE user "
                         "SET last_seen_amount ="
@@ -129,7 +142,8 @@ class DataBase:
         else:
             return False
 
-    #POTENTIAL TEST METHOD
+
+    # POTENTIAL TEST METHOD
     # @classmethod
     # def add_new_material(cls):
     #     con = cls.connect()
