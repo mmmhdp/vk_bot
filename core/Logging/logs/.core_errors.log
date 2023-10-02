@@ -349,3 +349,64 @@ INFO - 2023-10-02 20:36:14 - 85521 - connected to db  - core.DataBase.DataBase -
 INFO - 2023-10-02 20:36:14 - 85521 - get all topics from db  - core.DataBase.DataBase - 26
 INFO - 2023-10-02 20:36:14 - 85521 - connected to db  - core.DataBase.DataBase - 12
 INFO - 2023-10-02 20:36:14 - 85521 - get unanswered question with id 1 from db for user 183249817  - core.DataBase.DataBase - 65
+CRITICAL - 2023-10-02 21:01:45 - 85521 - Server down  - __main__ - 23
+CRITICAL - 2023-10-02 21:01:49 - 90560 - Server up  - __main__ - 11
+INFO - 2023-10-02 21:01:49 - 90560 - Start server initialization  - __main__ - 13
+INFO - 2023-10-02 21:01:49 - 90560 - Configuring environment  - __main__ - 17
+INFO - 2023-10-02 21:01:49 - 90560 - Environment configured successfully  - __main__ - 19
+INFO - 2023-10-02 21:01:49 - 90560 - Bot starts to listen  - __main__ - 20
+CRITICAL - 2023-10-02 21:12:57 - 90560 - Server down  - __main__ - 23
+CRITICAL - 2023-10-02 21:20:05 - 91611 - Server up  - __main__ - 11
+INFO - 2023-10-02 21:20:05 - 91611 - Start server initialization  - __main__ - 13
+INFO - 2023-10-02 21:20:05 - 91611 - Configuring environment  - __main__ - 17
+INFO - 2023-10-02 21:20:05 - 91611 - Environment configured successfully  - __main__ - 19
+INFO - 2023-10-02 21:20:05 - 91611 - Bot starts to listen  - __main__ - 20
+INFO - 2023-10-02 21:20:14 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:14 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:14 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:14 - 91611 - new user added to db  - core.DataBase.DataBase - 43
+INFO - 2023-10-02 21:20:14 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:14 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:14 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:14 - 91611 - checked for updates for user 697676633 from db  - core.DataBase.DataBase - 137
+INFO - 2023-10-02 21:20:14 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:14 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:14 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:14 - 91611 - get all topics from db  - core.DataBase.DataBase - 31
+INFO - 2023-10-02 21:20:35 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:35 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:35 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:35 - 91611 - new user added to db  - core.DataBase.DataBase - 43
+INFO - 2023-10-02 21:20:35 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:35 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:35 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:35 - 91611 - checked for updates for user 697676633 from db  - core.DataBase.DataBase - 137
+INFO - 2023-10-02 21:20:35 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:35 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:35 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:35 - 91611 - get all topics from db  - core.DataBase.DataBase - 31
+INFO - 2023-10-02 21:20:35 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:35 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:35 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:35 - 91611 - get unanswered question with id 4 from db for user 697676633  - core.DataBase.DataBase - 70
+INFO - 2023-10-02 21:20:41 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:41 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:41 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:41 - 91611 - new user added to db  - core.DataBase.DataBase - 43
+INFO - 2023-10-02 21:20:41 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:41 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:41 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:41 - 91611 - checked for updates for user 697676633 from db  - core.DataBase.DataBase - 137
+INFO - 2023-10-02 21:20:41 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:41 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:41 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:41 - 91611 - get all topics from db  - core.DataBase.DataBase - 31
+INFO - 2023-10-02 21:20:42 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:42 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:42 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:42 - 91611 - get all topics from db  - core.DataBase.DataBase - 31
+INFO - 2023-10-02 21:20:42 - 91611 - connected to db  - core.DataBase.DataBase - 13
+ERROR - 2023-10-02 21:20:42 - 91611 - failed to find relative path to sqlite db  - core.DataBase.DataBase - 16
+WARNING - 2023-10-02 21:20:42 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
+INFO - 2023-10-02 21:20:42 - 91611 - added correct for question with 4 for user 697676633 from db  - core.DataBase.DataBase - 86
+CRITICAL - 2023-10-02 21:20:52 - 91611 - Server down  - __main__ - 23

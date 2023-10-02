@@ -1,3 +1,5 @@
+import logging
+
 import vk_api
 from vk_api.longpoll import VkLongPoll
 from core.EventHandler.EventHandler import EventHandler
@@ -11,6 +13,7 @@ class MessageBroker:
         self.__longpoll = None
         self.__vk = None
         self.__event_handler = None
+        self.__logger = logging.getLogger(__name__)
 
     def setup(self):
         self.__key = config("VK_BOT_KEY")

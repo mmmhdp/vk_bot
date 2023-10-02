@@ -9,9 +9,14 @@ class DataBase:
 
     @classmethod
     def connect(cls):
-        cls.logger.info("connected to db")
-        connection = sqlite3.connect("core/DataBase/sqlite_db/testing_app.db")
-        # connection = sqlite3.connect("sqlite_db/testing_app.db")
+        try:
+            cls.logger.info("connected to db")
+            connection = sqlite3.connect("sqlite_db/testing_app.db")
+        except sqlite3.OperationalError:
+            cls.logger.error("failed to find relative path to sqlite db")
+            cls.logger.warning("change path to absolute for db connection")
+            connection = sqlite3.connect("core/DataBase/sqlite_db/testing_app.db")
+
         return connection
 
     @classmethod
