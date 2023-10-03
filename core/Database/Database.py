@@ -2,27 +2,26 @@ import logging
 import sqlite3
 from collections import namedtuple
 import math
+from decouple import config
 
 
 class DataBase:
     logger = logging.getLogger(__name__)
+    connection = None
 
     @classmethod
     def connect(cls):
-        try:
+        if not cls.connection:
+            path_to_db = config("ABSOLUTE_PATH_TO_SQLITE3_DB")
+            cls.connection = sqlite3.connect(path_to_db)
             cls.logger.info("connected to db")
-            connection = sqlite3.connect("sqlite_db/testing_app.db")
-        except sqlite3.OperationalError:
-            cls.logger.error("failed to find relative path to sqlite db")
-            cls.logger.warning("change path to absolute for db connection")
-            connection = sqlite3.connect("core/DataBase/sqlite_db/testing_app.db")
-
-        return connection
+        return cls.connection
 
     @classmethod
     def get_topics(cls):
         con = cls.connect()
         cur = con.cursor()
+
         raw_topics_cur = cur.execute("SELECT topic FROM question")
         raw_topics = raw_topics_cur.fetchall()
         all_topics = set()
@@ -105,17 +104,18 @@ class DataBase:
                         "AND user_id="
                         f"{user_id}")
             raw_num_of_answered_questions_by_topic = cur.fetchall()
-            noaqbt = raw_num_of_answered_questions_by_topic[0][0]
+            num_of_answered_questions_by_topic = raw_num_of_answered_questions_by_topic[0][0]
 
             cur.execute("SELECT COUNT(topic) "
                         "FROM question "
                         "WHERE topic="
                         f"'{topic}'")
             raw_total_questions_by_topic = cur.fetchall()
-            rqbt = raw_total_questions_by_topic[0][0]
+            total_questions_by_topic = raw_total_questions_by_topic[0][0]
 
-            ans_perc = (noaqbt / rqbt) * 100
+            ans_perc = (num_of_answered_questions_by_topic / total_questions_by_topic) * 100
             ans_perc = math.trunc(ans_perc)
+
             topic_stat = Stats(topic, ans_perc)
             user_statistics.append(topic_stat)
 
@@ -146,7 +146,6 @@ class DataBase:
             return True
         else:
             return False
-
 
     # POTENTIAL TEST METHOD
     # @classmethod

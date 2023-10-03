@@ -2,8 +2,8 @@ import logging
 
 from vk_api.longpoll import VkEventType
 from vk_api.utils import get_random_id
-from core.Keyboards.Keyboard import Keyboard
-from core.DataBase.DataBase import DataBase
+from core.Keyboard.Keyboard import Keyboard
+from core.Database.Database import DataBase
 
 
 class EventHandler:
@@ -25,7 +25,7 @@ class EventHandler:
                 new_update_flag = DataBase.have_new_update(self.__curr_user_id)
 
                 if new_update_flag:
-                    self.update_alert()
+                    self.update_notification()
                     self.__logger.debug(f"user with user_id {self.__curr_user_id} notified about updates")
 
                 elif request == "Начать":
@@ -38,7 +38,7 @@ class EventHandler:
 
                 elif request in DataBase.get_topics():
                     self.__logger.debug(f"user with user_id {self.__curr_user_id} pick the topic {request}")
-                    self.testing(request)
+                    self.give_question_to_think_on(request)
 
                 elif request == "Моя статистика":
                     self.show_stats()
@@ -49,7 +49,7 @@ class EventHandler:
                         self.check_answer(request)
 
                     else:
-                        self.incorrect_topic()
+                        self.handle_incorrect_input()
                         self.__logger.debug(f"user with user_id {self.__curr_user_id} gives wrong input")
 
     def is_message_before_last_is_valid_question_message(self):
@@ -75,7 +75,7 @@ class EventHandler:
         )
 
     def show_all_topics(self):
-        keyboard = Keyboard.get_all_topics_keyboard()
+        keyboard = Keyboard.get_keyboard_with_all_topics()
         self.__vk.messages.send(
             keyboard=keyboard.get_keyboard(),
             user_id=self.__curr_user_id,
@@ -83,10 +83,10 @@ class EventHandler:
             message="На данный момент доступны тесты только по данным темам.",
         )
 
-    def testing(self, topic):
+    def give_question_to_think_on(self, topic):
         question = DataBase.get_unanswered_question(topic, self.__curr_user_id)
         if not question.question:
-            keyboard = Keyboard.get_all_topics_keyboard()
+            keyboard = Keyboard.get_keyboard_with_all_topics()
             self.__logger.debug(f"user with user_id {self.__curr_user_id} end questions on topic {topic}")
 
             self.__vk.messages.send(
@@ -111,7 +111,7 @@ class EventHandler:
             )
 
     def check_answer(self, answer):
-        keyboard = Keyboard.get_all_topics_keyboard()
+        keyboard = Keyboard.get_keyboard_with_all_topics()
         if answer.lower() == self.__last_asked_question.answer.lower():
             self.__logger.debug(f"user with user_id {self.__curr_user_id}"
                                 f" gives right answer on question with id {self.__last_asked_question.id}")
@@ -136,7 +136,7 @@ class EventHandler:
             )
         self.__last_asked_question = ""
 
-    def incorrect_topic(self):
+    def handle_incorrect_input(self):
         keyboard = Keyboard.get_init_keyboard()
         self.__vk.messages.send(
             keyboard=keyboard.get_keyboard(),
@@ -165,7 +165,7 @@ class EventHandler:
                         f"равен {st_for_topic.ans_percentage} %!"
             )
 
-    def update_alert(self):
+    def update_notification(self):
         keyboard = Keyboard.get_init_keyboard()
         user_name = self.__vk.users.get(user_ids=(self.__curr_user_id))[0]["first_name"]
         self.__vk.messages.send(

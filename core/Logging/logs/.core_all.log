@@ -410,3 +410,9 @@ ERROR - 2023-10-02 21:20:42 - 91611 - failed to find relative path to sqlite db 
 WARNING - 2023-10-02 21:20:42 - 91611 - change path to absolute for db connection  - core.DataBase.DataBase - 17
 INFO - 2023-10-02 21:20:42 - 91611 - added correct for question with 4 for user 697676633 from db  - core.DataBase.DataBase - 86
 CRITICAL - 2023-10-02 21:20:52 - 91611 - Server down  - __main__ - 23
+CRITICAL - 2023-10-03 09:47:10 - 117000 - Server up  - __main__ - 11
+INFO - 2023-10-03 09:47:10 - 117000 - Start server initialization  - __main__ - 13
+INFO - 2023-10-03 09:47:10 - 117000 - Configuring environment  - __main__ - 17
+INFO - 2023-10-03 09:47:10 - 117000 - Environment configured successfully  - __main__ - 19
+INFO - 2023-10-03 09:47:10 - 117000 - Bot starts to listen  - __main__ - 20
+CRITICAL - 2023-10-03 09:47:12 - 117000 - Server down  - __main__ - 23

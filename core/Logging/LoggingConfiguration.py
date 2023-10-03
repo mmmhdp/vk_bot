@@ -2,7 +2,7 @@ import logging.config
 from decouple import config
 
 
-class LoggingEngine:
+class LoggingConfiguration:
     LOG_FILENAME = config("LOG_FILENAME")
     LOGGING_CONFIG = {
         "version": 1,
@@ -37,5 +37,5 @@ class LoggingEngine:
     }
 
     @classmethod
-    def configurate_logger(cls):
+    def activate_config_for_logger(cls):
         logging.config.dictConfig(cls.LOGGING_CONFIG)

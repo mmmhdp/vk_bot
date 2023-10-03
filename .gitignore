@@ -1,2 +1,2 @@
 /.env
-/core/DataBase/sqlite_db/testing_app.db
+/core/Database/sqlite_db/vk_bot.db
