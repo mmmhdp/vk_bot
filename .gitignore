@@ -1,2 +1,3 @@
 /.env
 /core/Database/sqlite_db/vk_bot.db
+/core/Logging/logs/.core_all.log
