@@ -1,7 +1,7 @@
 import sqlite3
 from core.Database.Database import DataBase
 import pytest
-from decouple import config
+
 
 class TestDatabase:
     @pytest.fixture()
@@ -17,6 +17,7 @@ class TestDatabase:
             cur = get_connection.cursor()
             cur.execute(f"delete from user where vk_user_id="
                         f"'{user_id}'")
+            get_connection.commit()
 
         request.addfinalizer(remove_user_from_db)
 
@@ -56,4 +57,3 @@ class TestDatabase:
 
     def test_have_new_update(self):
         pass
-
