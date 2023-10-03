@@ -12,11 +12,12 @@ class TestKeyboard:
         keyboard = Keyboard.get_basic_keyboard()
         assert isinstance(keyboard, vk_api.keyboard.VkKeyboard)
 
-    def test_get_init_keyboard(self):
+    @classmethod
+    def test_get_init_keyboard(cls):
         init_keyboard = Keyboard.get_init_keyboard()
 
         button_one_label, button_two_label = (
-            self.get_labels_for_first_and_second_button_from_keyboard(init_keyboard))
+            cls.get_labels_for_first_and_second_button_from_keyboard(init_keyboard))
 
         assert button_one_label == "Пройти тест по теме" and button_two_label == "Моя статистика"
 
