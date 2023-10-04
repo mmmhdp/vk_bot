@@ -146,22 +146,3 @@ class DataBase:
             return True
         else:
             return False
-
-    # POTENTIAL TEST METHOD
-    # @classmethod
-    # def add_new_material(cls):
-    #     con = cls.connect()
-    #     cur = con.cursor()
-    #     new_topic = "Математика"
-    #     new_questions = ["2+2", "3+3", "5+2"]
-    #     new_answers = ["4", "6", "7"]
-    #     new_links = ["https://Математика/1", "https://Математика/2", "https://Математика/3"]
-    #     for ind in range(len(new_questions)):
-    #         cur.execute("INSERT INTO question (topic, question, answer, link) "
-    #                     f"VALUES ("
-    #                     f"'{new_topic}',"
-    #                     f"'{new_questions[ind]}',"
-    #                     f"'{new_answers[ind]}',"
-    #                     f"'{new_links[ind]}')")
-    #         con.commit()
-    #     cur.execute("DELETE FROM question WHERE topic='Математика'")

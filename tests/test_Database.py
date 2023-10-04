@@ -55,5 +55,43 @@ class TestDatabase:
     def test_get_user_statistics(self):
         pass
 
-    def test_have_new_update(self):
-        pass
+    @pytest.fixture
+    def create_mock_update(self, get_connection):
+        new_topic = "Математика"
+        new_questions = ["2+2", "3+3", "5+2"]
+        new_answers = ["4", "6", "7"]
+        new_links = ["https://Математика/1", "https://Математика/2", "https://Математика/3"]
+
+        con = get_connection
+        cur = con.cursor()
+        for ind in range(len(new_questions)):
+            cur.execute("INSERT INTO question (topic, question, answer, link) "
+                        f"VALUES ("
+                        f"'{new_topic}',"
+                        f"'{new_questions[ind]}',"
+                        f"'{new_answers[ind]}',"
+                        f"'{new_links[ind]}')")
+            con.commit()
+        yield
+        cur.execute("DELETE FROM question WHERE topic='Математика'")
+        con.commit()
+
+    @pytest.fixture(params=["1", "2", "3"])
+    def create_mock_user(self, request, get_connection):
+        user_id = request.param
+
+        con = get_connection
+        cur = con.cursor()
+        cur.execute("insert into user (vk_user_id) "
+                    "values "
+                    f"('{user_id}')")
+        con.commit()
+        yield user_id
+        cur.execute("delete from user "
+                    "where vk_user_id="
+                    f"{user_id}")
+        con.commit()
+        cur.close()
+
+    def test_have_new_update(self, create_mock_update, create_mock_user):
+        assert DataBase.have_new_update(create_mock_user)
